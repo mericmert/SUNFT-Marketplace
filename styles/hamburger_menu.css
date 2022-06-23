@@ -1,0 +1,54 @@
+.header-container {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+}
+
+.hamburger-menu{
+    display: none;
+
+}
+
+@media screen and (max-width: 768px) {
+  .line {
+    display: block;
+    width: 100%;
+    height: 5px;
+    background-color: gray;
+    border-radius: 10px;
+    z-index: 5;
+  }
+
+  .line {
+    transition: all 0.3s ease-in-out;
+  }
+
+  input[type='checkbox']:checked ~ div .line1 {
+    transform: rotate(45deg) translateY(15px) translateX(5px);
+  }
+  input[type='checkbox']:checked ~ div .line2 {
+    display: none;
+  }
+  input[type='checkbox']:checked ~ div .line3 {
+    transform: rotate(-45deg) translateY(-16px) translateX(8px);
+  }
+  .hamburger-menu {
+    width: 250px;
+    height: 32rem;
+    padding: 2em;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    color: gray;
+    top: 0;
+    right: -350px;
+    background-color: #18191c;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
+  }
+  input[type='checkbox']:checked ~ .hamburger-menu {
+    transform: translateX(-350px);
+  }
+}
