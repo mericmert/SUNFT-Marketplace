@@ -92,7 +92,7 @@ export default search
 export async function getServerSideProps(context){
   const searchText = context.query.searchText;
   let collectionList, nftList
-  await fetch(`http://localhost:8000/api/nftcollections`,{
+  await fetch(`http:mertd./api/nftcollections`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",
