@@ -7,14 +7,14 @@ import {AuthContext} from "../context/authContext";
 import UserHelper from "../backendHelpers/UserHelper";
 import { ImagePath } from "../VARIABLES";
 
-const Users = new UserHelper();
 
 const favorites = () => {
     const { state, dispatch } = useContext(AuthContext);
     const [likes, setLikes] = useState([])
 
     useEffect(() => {
-        Users.find({ uAddress: state.uAddress }).then(user => {
+      const adress = JSON.parse(localStorage.getItem("state")).uAddress;
+        UserHelper.find({ uAddress: adress }).then(user => {
             user.getLikes().then(lk => {
                 setLikes(lk);
             })
@@ -28,7 +28,6 @@ const favorites = () => {
         </h1>
 
         <div className="container my-24 mx-auto flex justify-center">
-
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {likes.map((nft) => (
                     <ProfileCard
@@ -42,7 +41,6 @@ const favorites = () => {
                     />
                 ))}
             </div>
-
         </div>
       </Layout>
     </div>

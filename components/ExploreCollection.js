@@ -8,23 +8,22 @@ const CollectionCard = dynamic(
   },
   { ssr: false }
 )
-
 const ExploreCollection = ({ categoryName }) => {
 
   const [collections, setCollections] = useState([]);
 
   
-  const getData = () => {
-    NFTCollectionCategoryHelper.find(categoryName).then(category => {
-      category.getNFTCollections().then(collections => {
-        setCollections(collections);
-      });
-    });
-  }
-
-  useEffect(()=>{
-    getData();
-  },[])
+  // const getData = () => {
+  //   NFTCollectionCategoryHelper.find(categoryName).then(category => {
+  //     category.getNFTCollections().then(collections => {
+  //       setCollections(collections);
+  //     });
+  //   });
+  // }
+  //
+  // useEffect(()=>{
+  //   getData();
+  // },[])
   
 
   return (

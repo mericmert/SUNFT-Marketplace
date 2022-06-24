@@ -5,14 +5,13 @@ import { FaEthereum } from 'react-icons/fa'
 import UserHelper from "../backendHelpers/UserHelper";
 import {ImagePath} from "../VARIABLES";
 
-const Users = new UserHelper();
 
 const Table = () => {
   const [watchLists, setWatchLists] = useState([]);
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-  Users.find({uAddress: state.uAddress}).then(user => {
+  UserHelper.find({uAddress: state.uAddress}).then(user => {
     user.getWatchLists().then(w => {
       setWatchLists(w);
   })
@@ -21,7 +20,7 @@ const Table = () => {
 
   const handleButtonClick = (idx) => async () => {
     await watchLists[idx].removeWatchList(state.uAddress);
-    await Users.find({uAddress: state.uAddress}).then(user => {
+    await UserHelper.find({uAddress: state.uAddress}).then(user => {
       user.getWatchLists().then(w => {
         setWatchLists(w);
       })

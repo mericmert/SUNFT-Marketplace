@@ -39,7 +39,9 @@ export default function login() {
     if (address != null) {
       dispatch({type: WEB3_CONNECTION_SUCCESS, payload: address });
       UserHelper.find({uAddress: address}).then(user => {
+
         if (user == false) {
+
           router.push(`/register/${address}`);
         } else {
           router.push(`/loginUsername/${address}`)

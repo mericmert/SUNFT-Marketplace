@@ -70,12 +70,14 @@ class UserHelper {
                     type: REGISTER_SUCCESS
                 });
             } else {
+                console.log("ZORT");
                 UserHelper.dispatch({
                     type: REGISTER_FAIL
                 });
             }
         }
          catch(err) {
+            console.log(err);
             UserHelper.dispatch({
                 type: REGISTER_FAIL
             });
