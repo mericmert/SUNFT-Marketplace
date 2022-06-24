@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosSettings } from 'react-icons/io'
 import { FiLogOut } from 'react-icons/fi'
 import { BsFillEyeFill } from 'react-icons/bs'
@@ -12,7 +12,11 @@ import {AuthContext} from "../context/authContext";
 
 const Dropdown = () => {
 
-  const { state, dispatch } = useContext(AuthContext);
+  const [state, setState] = useState({});
+  useEffect(() => {
+    setState(JSON.parse(localStorage.getItem("state")));
+  }, []);
+
   return (
     <div>
       <div className="dropdown group relative cursor-pointer flex justify-center">
@@ -67,26 +71,15 @@ const Dropdown = () => {
               </Link>
             </li>
 
-          
-
-            <li className="pb-4 text-lg font-normal">
-              <a
-                href="#"
-                className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
-              >
-                <IoIosSettings className="mr-3 h-6 w-6" />
-                Settings
-              </a>
-            </li>
-
-            <li className="pb-4 text-lg font-normal">
-              <a
-                href="#"
-                className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
-              >
-                <FiLogOut className="mr-3 h-6 w-6" />
-                Logout
-              </a>
+            <li onClick={() => {localStorage.clear()}} className="pb-4 text-lg font-normal">
+              <Link  href="/">
+                <a
+                    className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
+                >
+                  <FiLogOut className="mr-3 h-6 w-6" />
+                  Logout
+                </a>
+              </Link>
             </li>
           </ul>
         </div>

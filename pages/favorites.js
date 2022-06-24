@@ -32,8 +32,8 @@ const favorites = () => {
                 {likes.map((nft) => (
                     <ProfileCard
                     key={nft.id}
-                    username={nft.username}
-                    title={nft.title}
+                    currentOwner={nft.currentOwner}
+                    title={nft.name}
                     like={nft.numLikes}
                     eth_price={5}
                     image={`${ImagePath}${nft.nftFile}`}

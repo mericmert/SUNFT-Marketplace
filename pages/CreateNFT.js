@@ -29,6 +29,12 @@ const CreateNFT = () => {
 
   }, []);
 
+  useEffect(() => {
+    if (categories.length !== 0) {
+      handleFormDataChange({target: {name: "collection", value: categories[0].name }});
+    };
+  }, [categories])
+
   const getNFTCollections = async () => {
     const categories = await NFTCollectionHelper.findMany({owner: JSON.parse(localStorage.getItem("state")).user.username});
     setCategories(categories);
@@ -36,6 +42,7 @@ const CreateNFT = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    console.log(collection);
     const nftData = await createNewNFTContractAndMint({...formData, media });
     const newNFT = new NFT({index: id, UID: nftData.address, name, description, metaDataType: dataType, creator: JSON.parse(localStorage.getItem("state")).uAddress,
     collectionName: collection, currentOwner: JSON.parse(localStorage.getItem("state")).user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0, nftFile: media});
@@ -45,8 +52,8 @@ const CreateNFT = () => {
   }
 
   useEffect(() => {
-    console.log(categories);
-  }, [categories])
+    console.log(formData);
+  }, [formData])
 
 
   return (
@@ -195,7 +202,6 @@ const CreateNFT = () => {
                         focus:text-gray-300"
                       id="exampleInput8"
                       placeholder="Item ID"
-                      value={id}
                       onChange={handleFormDataChange}
                   />
                 </div>
@@ -270,9 +276,8 @@ const CreateNFT = () => {
                     aria-label="select"
                     name={"collection"}
                     onChange={handleFormDataChange}
-                    value={collection}
                   >
-                    {categories.map((category) => <option value={category.name}>{category.name}</option>)}
+                    {categories.map((category, index) => <option key={`category-option-${index}`} value={category.name} >{category.name}</option>)}
                   </select>
                 </div>
 

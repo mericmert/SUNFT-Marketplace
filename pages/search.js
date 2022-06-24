@@ -5,7 +5,7 @@ import ProfileCard from '../components/ProfileCard'
 import SearchCollectionCard from '../components/SearchCollectionCard'
 import nftData from '../mock_data/item_data.json'
 import Router,{ useRouter } from 'next/router'
-import { ImagePath } from '../VARIABLES'
+import {APIPath, ImagePath} from '../VARIABLES'
 
 const search = ({nfts,collections,text}) => {
     const router = useRouter()
@@ -92,7 +92,7 @@ export default search
 export async function getServerSideProps(context){
   const searchText = context.query.searchText;
   let collectionList, nftList
-  await fetch(`http://localhost:8000/api/nftcollections`,{
+  await fetch(`${APIPath}/nftcollections`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export async function getServerSideProps(context){
   .then(collection_data => {
     collectionList = collection_data;
   })
-  await fetch(`http://localhost:8000/api/nfts/`,{
+  await fetch(`${APIPath}/nfts/`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -37,10 +37,7 @@ class NFTHelper {
 
     static async add(nft: NFT) {
         try {
-            const response = await axios.post(`${APIPath}/nfts/`, nft.toFormData(), {proxy: {
-                    host: 'www.speedrun.com',
-                    port: 3128
-                }});
+            const response = await axios.post(`${APIPath}/nfts/`, nft.toFormData());
             return response.status === 201;
         }
         catch (e) {

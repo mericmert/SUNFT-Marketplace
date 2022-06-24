@@ -108,7 +108,7 @@ function Profile({ username, user, nfts }) {
                     {filteredProducts.map((nft,indx) => (
                         <ProfileCard
                             key={nft.id}
-                            username={username}
+                            currentOwner={user.uAddress}
                             title={nft.name}
                             like={nft.numLikes}
                             eth_price={nft.price}

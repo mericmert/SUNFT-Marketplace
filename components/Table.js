@@ -6,26 +6,13 @@ import UserHelper from "../backendHelpers/UserHelper";
 import {ImagePath} from "../VARIABLES";
 
 
-const Table = () => {
-  const [watchLists, setWatchLists] = useState([]);
-  const { state, dispatch } = useContext(AuthContext);
-
-  useEffect(() => {
-  UserHelper.find({uAddress: state.uAddress}).then(user => {
-    user.getWatchLists().then(w => {
-      setWatchLists(w);
-  })
-  })
-}, [])
+const Table = ({ watchLists, handleClick }) => {
 
   const handleButtonClick = (idx) => async () => {
-    await watchLists[idx].removeWatchList(state.uAddress);
-    await UserHelper.find({uAddress: state.uAddress}).then(user => {
-      user.getWatchLists().then(w => {
-        setWatchLists(w);
-      })
-    })
+    await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, watchLists[idx].collectionName);
+    handleClick();
   }
+
   return (
     <div>
       <div className="relative overflow-x-auto flex justify-center">

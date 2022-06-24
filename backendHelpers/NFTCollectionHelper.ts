@@ -44,6 +44,19 @@ class NFTCollectionHelper {
             return false;
         }
     }
+
+    static async isWatchListedBy(uAddress: string, collectionName: string) {
+        try {
+            const response = await axios.get(`${APIPath}/watchLists/`, {params:
+                    {user: uAddress, nftCollection: collectionName }});
+            const responseData = await response.data;
+            console.log(responseData);
+            return responseData.length !== 0;
+        }
+        catch (e) {
+            return false;
+        }
+    }
 }
 
 export default NFTCollectionHelper;
