@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 import NFTCollectionHelper from '../../backendHelpers/NFTCollectionHelper'
 import { ImagePath } from '../../VARIABLES'
 import Link from 'next/link'
-const Collections = new NFTCollectionHelper()
 
 const collection = ({ collectionName }) => {
   const router = useRouter()
@@ -24,7 +23,7 @@ const collection = ({ collectionName }) => {
   const [collection, setCollection] = useState(null)
 
   useEffect(() => {
-    Collections.find(collectionName).then((collection) => {
+    NFTCollectionHelper.find(collectionName).then((collection) => {
       setCollection(collection)
       collection.getNFTs().then((NFTs) => {
         NFTs = NFTs.map((nft, indx) => ({ ...nft, price: indx * 8 + 13 }))

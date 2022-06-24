@@ -34,12 +34,16 @@ const Hero = () => {
                 SUNFT is the NFT marketplace of the Sabancı University .
               </div>
               <div className={style.ctaContainer}>
-                <a href="/explore">
+                <Link href="/explore">
+                <a>
                   <button className={style.accentedButton}>Explore</button>
                 </a>
-                <a href="/CreateNFT">
+                </Link>
+                <Link href="/CreateNFT">
+                <a>
                   <button className={style.button}>Create</button>
                 </a>
+                </Link>
               </div>
             </div>
             <div className={style.cardContainer}>

@@ -9,7 +9,6 @@ const CollectionCard = dynamic(
   { ssr: false }
 )
 
-const Categories = new NFTCollectionCategoryHelper();
 
 const ExploreCollection = ({ categoryName }) => {
 
@@ -17,7 +16,7 @@ const ExploreCollection = ({ categoryName }) => {
 
   
   const getData = () => {
-    Categories.find(categoryName).then(category => {
+    NFTCollectionCategoryHelper.find(categoryName).then(category => {
       category.getNFTCollections().then(collections => {
         setCollections(collections);
       });

@@ -18,8 +18,7 @@ const explore = ({ categories }) => {
 }
 
 export async function getStaticProps(context) {
-    const NFTCategories = new NFTCollectionCategoryHelper();
-    const categories = await NFTCategories.findMany({});
+    const categories = await NFTCollectionCategoryHelper.findMany({});
     return {
         props: {categories: JSON.stringify(categories) }, // will be passed to the page component as props
     }

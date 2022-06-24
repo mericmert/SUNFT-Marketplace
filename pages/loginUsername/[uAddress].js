@@ -18,22 +18,15 @@ const loginUsername = ({ uAddress }) => {
         e.preventDefault();
         await UserHelper.login(username, password);
     }
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("web3-token"));
-        if(data){
-            router.push("/");
-        }
-        else{
-            setLoading(false);
-        }
-    },[])
-
+    
     useEffect(() => {
         UserHelper._initialize(dispatch);
-        if (state.user) {
+        if (state.isAuthenticated) {
             router.push(`/profile/${uAddress}`);
+            setLoading(false);
         }
         else {
+            setLoading(false);
             setError("Try again.")
         }
     }, [state])

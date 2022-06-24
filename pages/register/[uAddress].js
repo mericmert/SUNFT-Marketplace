@@ -28,26 +28,15 @@ const register = ({ uAddress }) => {
     });
 
   }
-  useEffect(() => {
-    
-    const auth = localStorage.getItem("web3-token");
-    if(auth){
-      router.push("/");
-    }
-    else{
-      setLoading(false);
-    }
-  },[]);
+ 
 
   useEffect(() => {
     UserHelper._initialize(dispatch);
     if (state.register_success) {
-      /*dispatch({
-        type: RESET_REGISTER_SUCCESS
-      })*/
+      setLoading(false);
       console.log("Succesfully registered!");
-      localStorage.setItem("web3-token", JSON.stringify({username, uAddress}));
       router.push("/");
+      setLoading(false);
     }
   }, [state])
 

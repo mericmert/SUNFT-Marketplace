@@ -36,11 +36,11 @@ export default function login() {
   },[])
 
   useEffect(() => {
-    console.log(state);
     if (address != null) {
       dispatch({type: WEB3_CONNECTION_SUCCESS, payload: address });
       UserHelper.find({uAddress: address}).then(user => {
-        if (user == null) {
+        console.log("USER LOG : ", user);
+        if (!user) {
           router.push(`/register/${address}`);
         } else {
           router.push(`/loginUsername/${address}`)
