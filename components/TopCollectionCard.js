@@ -3,12 +3,26 @@ import { ImagePath } from '../VARIABLES'
 import Link from 'next/link'
 import NFTHelper from '../backendHelpers/NFTHelper';
 import NFTCollectionHelper from '../backendHelpers/NFTCollectionHelper';
+import UserHelper from '../backendHelpers/UserHelper';
+
 function TopCollectionCard({collection, idx}) {
     const [isWatched, setIsWatched] = useState(false);
     useEffect(() => {
-        setIsWatched(NFTCollectionHelper.isWatchListedBy(JSON.parse(localStorage.getItem("state"))?.uAddress), collection.name);
-    }, [])
-    console.log(isWatched);
+        (async () => {
+            const _isWatched = await NFTCollectionHelper.isWatchListedBy(JSON.parse(localStorage.getItem("state"))?.uAddress, collection.name)
+            setIsWatched(_isWatched);
+        })()
+    },[])
+    const handleWatchList = async () => {
+        if (isWatched) {
+          setIsWatched(false);
+          await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collection.name);
+        }
+        else {
+          setIsWatched(true);
+          await UserHelper.addWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collection.name);
+        }
+      }
     return (
         <tr className="border-b border-primary-color-6 transition duration-300 ease-in-out hover:bg-primary-color-hover">
           <td className="whitespace-nowrap px-6 py-4 text-sm font-light text-white">
@@ -32,7 +46,7 @@ function TopCollectionCard({collection, idx}) {
           </td>
     
           <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-light text-white">
-            <button>
+            <button onClick={handleWatchList}>
               <div className="container flex justify-between rounded-lg border px-2 text-center text-gray-400 hover:text-white focus:text-white">
                 <div className="my-2">
                   {!isWatched ? 'Add' : 'Remove'} Watchlist
