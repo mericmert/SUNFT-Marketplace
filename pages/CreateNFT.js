@@ -38,7 +38,8 @@ const CreateNFT = () => {
     e.preventDefault();
     const nftData = await createNewNFTContractAndMint({...formData, media });
     const newNFT = new NFT({index: id, UID: nftData.address, name, description, metaDataType: dataType, creator: JSON.parse(localStorage.getItem("state")).uAddress,
-    collectionName: collection, currentOwner: JSON.parse(localStorage.getItem("state")).user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0});
+    collectionName: collection, currentOwner: JSON.parse(localStorage.getItem("state")).user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0, nftFile: media});
+    console.log(newNFT);
     await NFTHelper.add(newNFT);
 
   }

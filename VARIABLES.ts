@@ -1,3 +1,3 @@
-export const APIPath: string = "https://mertd.pythonanywhere.com/api";
-export const AuthPath: string = "https://mertd.pythonanywhere.com/auth";
-export const ImagePath: string = "https://mertd.pythonanywhere.com/";
+export const APIPath: string = "https://mydjangocs308.herokuapp.com/api";
+export const AuthPath: string = "https://mydjangocs308.herokuapp.com/auth";
+export const ImagePath: string = "https://mydjangocs308.herokuapp.com/";
