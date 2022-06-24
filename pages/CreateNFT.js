@@ -1,7 +1,53 @@
-import React from 'react'
+import React, {useContext, useEffect, useReducer, useState} from 'react'
 import Layout from '../components/Layout'
+import useInput from "../hooks/useInputState";
+import {AuthContext} from "../context/authContext";
+import {useRouter} from "next/router";
+import {createNewNFTContractAndMint} from "./blockchain/web3Functions";
+import NFTCollectionHelper from "../backendHelpers/NFTCollectionHelper";
+import NFTCollectionCategoryHelper from "../backendHelpers/NFTCollectionCategoryHelper";
+import NFT from "../objects/NFT";
+import NFTHelper from "../backendHelpers/NFTHelper";
 
-const create = () => {
+
+const CreateNFT = () => {
+  const [formData, handleFormDataChange, resetFormData] = useInput({ dataType: null, name: "", description: "", collection: "", id: null});
+  const { id, dataType, name, description, collection } = formData;
+  const [media, setMedia] = useState(null);
+  const { state, _ } = useContext(AuthContext);
+  const router = useRouter();
+  const [categories, setCategories] = useState([]);
+
+  const handleMediaSelect = (e) => {
+    setMedia(e.target.files[0]);
+  }
+  useEffect(() => {
+    (async () => getNFTCollections())();
+    if (typeof JSON.parse(localStorage.getItem("state")).uAddress != "string") {
+      router.push("/login");
+    }
+
+  }, []);
+
+  const getNFTCollections = async () => {
+    const categories = await NFTCollectionHelper.findMany({owner: JSON.parse(localStorage.getItem("state")).user.username});
+    setCategories(categories);
+  }
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const nftData = await createNewNFTContractAndMint({...formData, media });
+    const newNFT = new NFT({index: id, UID: nftData.address, name, description, metaDataType: dataType, creator: JSON.parse(localStorage.getItem("state")).uAddress,
+    collectionName: collection, currentOwner: JSON.parse(localStorage.getItem("state")).user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0});
+    await NFTHelper.add(newNFT);
+
+  }
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories])
+
+
   return (
     <div>
       <Layout>
@@ -49,7 +95,7 @@ const create = () => {
                             SVG, PNG, JPG or GIF (MAX. 800x400px)
                           </p>
                         </div>
-                        <input id="dropzone-file" type="file" className="hidden" />
+                        <input id="dropzone-file" type="file" name={"media"} onChange={handleMediaSelect} />
                       </label>
                     </div>
                   </div>
@@ -82,11 +128,14 @@ const create = () => {
                             ease-in-out 
                          focus:outline-none"
                     aria-label="select"
+                    name={"dataType"}
+                    value={dataType}
+                    onChange={handleFormDataChange}
                   >
                     <option selected>Select type</option>
-                    <option value="1">Image</option>
-                    <option value="2">Audio</option>
-                    <option value="3">Video</option>
+                    <option value="image">Image</option>
+                    <option value="audio">Audio</option>
+                    <option value="video">Video</option>
                   </select>
                 </div>
 
@@ -95,6 +144,7 @@ const create = () => {
                     Name <span className="text-red-600">*</span>
                   </h2>
                   <input
+                      name="name"
                     type="text"
                     className="form-control m-0
                         block
@@ -112,11 +162,43 @@ const create = () => {
                         transition
                         ease-in-out
                         
-                        focus:text-gray-700"
+                        focus:text-gray-300"
                     id="exampleInput7"
                     placeholder="Item name"
+                    value={name}
+                    onChange={handleFormDataChange}
                   />
                 </div>
+                <div className="form-group mb-6">
+                  <h2 className="mb-3 text-xl font-bold text-white">
+                    ID <span className="text-red-600">*</span>
+                  </h2>
+                  <input
+                      name="id"
+                      type="number"
+                      className="form-control m-0
+                        block
+                        w-full
+                        rounded
+                        border
+                        border-solid
+                        border-black
+                        bg-[#363840]
+                        bg-clip-padding
+                        px-3 py-1.5
+                        text-base
+                        font-normal
+                        text-gray-200
+                        transition
+                        ease-in-out
+                        focus:text-gray-300"
+                      id="exampleInput8"
+                      placeholder="Item ID"
+                      value={id}
+                      onChange={handleFormDataChange}
+                  />
+                </div>
+
 
                 <h2 className="mb-3 text-xl font-bold text-white">
                   Description
@@ -146,12 +228,15 @@ const create = () => {
                         transition
                         ease-in-out
                         
-                        focus:text-gray-700
+                        focus:text-gray-300
                       "
                     id="exampleFormControlTextarea13"
                     rows="3"
                     placeholder="Provide a detailed description of your item."
-                  ></textarea>
+                    name={"description"}
+                    value={description}
+                    onChange={handleFormDataChange}
+                 />
                 </div>
 
                 <h2 className="mb-3 text-xl font-bold text-white">
@@ -182,11 +267,11 @@ const create = () => {
                             
                          focus:outline-none"
                     aria-label="select"
+                    name={"collection"}
+                    onChange={handleFormDataChange}
+                    value={collection}
                   >
-                    <option selected>Select collection</option>
-                    <option value="1">collection1</option>
-                    <option value="2">collection2</option>
-                    <option value="3">collection3</option>
+                    {categories.map((category) => <option value={category.name}>{category.name}</option>)}
                   </select>
                 </div>
 
@@ -196,7 +281,7 @@ const create = () => {
                 </h5>
 
                 <button
-                  type="submit"
+                  onClick={handleFormSubmit}
                   className="
                       w-34
                       border-black
@@ -218,7 +303,7 @@ const create = () => {
                     
                       active:shadow-lg"
                 >
-                  SELL
+                  CREATE
                 </button>
               </form>
             </div>
@@ -228,5 +313,6 @@ const create = () => {
     </div>
   )
 }
+export default CreateNFT;
 
-export default create
+

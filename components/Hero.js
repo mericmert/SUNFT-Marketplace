@@ -37,7 +37,7 @@ const Hero = () => {
                 <a href="/explore">
                   <button className={style.accentedButton}>Explore</button>
                 </a>
-                <a href="/createItem">
+                <a href="/CreateNFT">
                   <button className={style.button}>Create</button>
                 </a>
               </div>

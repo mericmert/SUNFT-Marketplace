@@ -1,5 +1,8 @@
 import React from 'react'
 import Layout from '../components/Layout'
+import CollectionCard from "../components/CollectionCard";
+import {ImagePath} from "../VARIABLES";
+import Link from 'next/link';
 
 const myCollections = () => {
   return (
@@ -11,11 +14,18 @@ const myCollections = () => {
             Create, curate, and manage collections of unique NFTs to share and
             sell.
           </p>
-          <a href='/createCollection'>
-            <button className="mt-12 flex h-10 w-48 items-center justify-center gap-x-3 overflow-hidden rounded-md bg-pink-500 p-6 text-center text-white  hover:bg-pink-700">
+          <div className='flex mt-12 gap-x-2 flex-row flex-wrap w-5/6'>
+            {/*{collections.map((collection,idx) => {*/}
+            {/*  return  <CollectionCard key={idx} img_src={${ImagePath}${collection.collectionImage}} name={collection.name} owner={collection.owner} description={collection.description} />*/}
+            {/*})}*/}
+          </div>
+          <Link href='/createCollection'>
+            <a>
+              <button className="mt-12 flex h-10 w-48 items-center justify-center gap-x-3 overflow-hidden rounded-md bg-pink-500 p-6 text-center text-white  hover:bg-pink-700">
                 <p>Create a collection</p>
-            </button>
-          </a>
+              </button>
+            </a>
+          </Link>
         </div>
       </Layout>
     </div>
@@ -23,3 +33,5 @@ const myCollections = () => {
 }
 
 export default myCollections
+
+//initialprops

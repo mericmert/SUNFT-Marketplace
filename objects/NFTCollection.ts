@@ -2,6 +2,7 @@ import {APIPath} from "../VARIABLES";
 import NFT from "./NFT";
 import User from './User';
 import axios from "axios";
+import FormData from "form-data";
 
 class NFTCollection {
     name: string;
@@ -12,7 +13,7 @@ class NFTCollection {
     collectionImage: string | null;
 
     constructor({name, description, owner, category, numLikes, collectionImage }:
-                    { name:string; description:string | null; owner: string; category: string | null; numLikes: number; collectionImage: string | null; }) {
+                    { name:string; description:string | null; owner: string; category: string | null; numLikes: number; collectionImage: any; }) {
         this.name = name;
         this.description = description;
         this.owner = owner;
@@ -92,6 +93,16 @@ class NFTCollection {
         catch (e) {
             return false;
         }
+    }
+
+    toFormData() {
+        let data = new FormData();
+        data.append('name', this.name);
+        data.append('collectionImage', this.collectionImage);
+        data.append('description', this.description);
+        data.append('owner', this.owner);
+        data.append('category', this.category);
+        return data;
     }
 
 }

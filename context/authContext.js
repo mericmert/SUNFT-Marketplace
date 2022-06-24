@@ -7,7 +7,8 @@ export const AuthProvider = ({children}) => {
   const [initialState, setInitialState] = useState({});
   useEffect(() => {
     setInitialState(JSON.parse(localStorage.getItem("state")));
-  },[])  
+  },[]);
+
     const [state, dispatch] = useReducer(authReducer, initialState);
     console.log("new state is", state);
     return (

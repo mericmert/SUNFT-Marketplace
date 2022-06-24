@@ -3,15 +3,15 @@ import axios from 'axios';
 import User from './User';
 
 import { APIPath } from '../VARIABLES';
+import FormData from "form-data";
 
 class NFT {
-    id: number | null;
     UID: string;
     index: number;
     name: string;
     description: string | null;
     metaDataType: string;
-    dataLink: string;
+    dataLink: string | null;
     collectionName: string | null;
     creator: string;
     currentOwner: string;
@@ -20,7 +20,6 @@ class NFT {
     numLikes: number;
 
     constructor({
-                    id,
                     UID,
                     index,
                     name,
@@ -35,7 +34,6 @@ class NFT {
                     numLikes}
                     :
                 {
-                    id: number | null,
                     UID: string,
                     index: number,
                     name: string,
@@ -62,7 +60,6 @@ class NFT {
         this.marketStatus = marketStatus;
         this.nftFile = nftFile;
         this.numLikes = numLikes;
-        this.id = id;
     }
 
     getPk() {
@@ -128,12 +125,20 @@ class NFT {
         }
     }
 
-    async update() {
+    // async update() {
+    //
+    // }
+    //
+    // delete() {
+    //
+    // }
 
-    }
-
-    delete() {
-
+    toFormData() {
+        let data = new FormData();
+        for (const [key, value] of Object.entries(this)) {
+            data.append(`${key}`, value);
+        }
+        return data;
     }
 }
 

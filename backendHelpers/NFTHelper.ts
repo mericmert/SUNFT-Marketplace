@@ -4,8 +4,8 @@ import axios from 'axios';
 
 class NFTHelper {
 
-    async find(UID: string, index: number) {
-        const response = await axios.get(`${APIPath}/nfts`, { params: {UID, index }});
+    static async find(UID: string, index: number) {
+        const response = await axios.get(`${APIPath}/nfts/`, { params: {UID, index }});
         const data = await response.data;
         if (data.length === 0) {
             return false;
@@ -14,8 +14,8 @@ class NFTHelper {
         return nft;
     }
 
-    async findMany(params: Object) {
-        const response = await axios.get(`${APIPath}/nfts`, { params });
+    static async findMany(params: Object) {
+        const response = await axios.get(`${APIPath}/nfts/`, { params });
         const data = await response.data;
         let nfts: NFT[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -24,9 +24,9 @@ class NFTHelper {
         return nfts;
     }
 
-    async deleteMany(params: Object) {
+    static async deleteMany(params: Object) {
         try {
-            const response = await axios.delete(`${APIPath}/nfts`, { data: params });
+            const response = await axios.delete(`${APIPath}/nfts/`, { data: params });
             return response.status === 200;
         }
         catch (e) {
@@ -34,9 +34,9 @@ class NFTHelper {
         }
     }
 
-    async add(nft: NFT) {
+    static async add(nft: NFT) {
         try {
-            const response = await axios.post(`${APIPath}/nfts`, nft);
+            const response = await axios.post(`${APIPath}/nfts/`, nft.toFormData());
             return response.status === 201;
         }
         catch (e) {

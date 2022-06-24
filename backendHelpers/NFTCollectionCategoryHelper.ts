@@ -4,8 +4,8 @@ import axios from 'axios';
 
 class NFTCollectionCategoryHelper {
 
-    async find(name: string) {
-        const response = await axios.get(`${APIPath}/categories`, { params: {name }});
+    static async find(name: string) {
+        const response = await axios.get(`${APIPath}/categories/`, { params: {name }});
         const data = await response.data;
         if (data.length === 0) {
             return false;
@@ -14,8 +14,8 @@ class NFTCollectionCategoryHelper {
         return category;
     }
 
-    async findMany(params: Object) {
-        const response = await axios.get(`${APIPath}/categories`, { params });
+    static async findMany(params: Object) {
+        const response = await axios.get(`${APIPath}/categories/`, { params });
         const data = await response.data;
         let categories: NFTCollectionCategory[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -24,9 +24,9 @@ class NFTCollectionCategoryHelper {
         return categories;
     }
 
-    async deleteMany(params: Object) {
+    static async deleteMany(params: Object) {
         try {
-            const response = await axios.delete(`${APIPath}/categories`, { data: params });
+            const response = await axios.delete(`${APIPath}/categories/`, { data: params });
             return response.status === 200;
         }
         catch (e) {
@@ -34,9 +34,9 @@ class NFTCollectionCategoryHelper {
         }
     }
 
-    async add(category: NFTCollectionCategory) {
+    static async add(category: NFTCollectionCategory) {
         try {
-            const response = await axios.post(`${APIPath}/categories`, category);
+            const response = await axios.post(`${APIPath}/categories/`, category);
             return response.status === 201;
         }
         catch (e) {

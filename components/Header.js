@@ -72,7 +72,7 @@ const Header = () => {
                 </Link>
               </div>
               <div className={style.headerItem}>
-                <Link href="/createItem">
+                <Link href="/CreateNFT">
                   <a>Create</a>
                 </Link>
               </div>
@@ -95,7 +95,7 @@ const Header = () => {
               </Link>
             </div>
             <div className={style.headerItem}>
-              <Link href="/createItem">
+              <Link href="/CreateNFT">
                 <a>Create</a>
               </Link>
             </div>

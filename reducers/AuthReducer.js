@@ -16,7 +16,7 @@ import {
 } from '../backendHelpers/types';
 
 
-const authReducer = (state = initialState, action) => {
+const authReducer = (state, action) => {
     const { type, payload } = action;
     console.log("current type is:", type);
     switch(type) {

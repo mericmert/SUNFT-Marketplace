@@ -1,7 +1,30 @@
-import React from 'react'
-import Layout from '../components/Layout'
+import React, { useState, useEffect, useContext } from 'react'
+import Layout from '../components/Layout';
+import useInput from "../hooks/useInputState";
+import NFTCollection from "../objects/NFTCollection";
+import NFTCollectionHelper from "../backendHelpers/NFTCollectionHelper";
+import {useRouter} from "next/router";
+
 
 const createCollection = () => {
+  const [formData, handleFormDataChange, reset] = useInput({  name: "", description: "", category: null });
+  const [media, setMedia] = useState(null);
+  const { name, category, description } = formData;
+  const router = useRouter();
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newCollection = new NFTCollection({name, description, owner: JSON.parse(localStorage.getItem("state")).user.username, category, numLikes: 0, collectionImage: media});
+    await NFTCollectionHelper.add(newCollection);
+    router.push("/myCollections");
+
+  }
+  const handleMediaSelect = (e) => {
+    setMedia(e.target.files[0]);
+  }
+
+
   return (
     <div>
       <Layout>
@@ -46,38 +69,10 @@ const createCollection = () => {
                             <p>or drag and drop</p>
                           </p>
                         </div>
-                        <input id="dropzone-file" type="file" className="hidden" />
+                        <input id="dropzone-file" type="file" className="hidden" onChange={handleMediaSelect} />
                       </label>
                     </div>
                   </div>
-                </div>
-
-                <div className="form-group mb-6">
-                  <h2 className="mb-3 text-xl font-bold text-white">
-                    Name <span className="text-red-600">*</span>
-                  </h2>
-                  <input
-                    type="text"
-                    className="form-control m-0
-                          block
-                          w-full
-                          rounded
-                          border
-                          border-solid
-                          border-black
-                          bg-[#363840]
-                          bg-clip-padding
-                          px-3 py-1.5 
-                          text-base
-                          font-normal
-                          text-gray-200
-                          transition
-                          ease-in-out
-                          
-                          focus:text-gray-700"
-                    id="exampleInput7"
-                    placeholder="Item name"
-                  />
                 </div>
 
                 <h2 className="mb-3 text-xl font-bold text-white">
@@ -104,12 +99,15 @@ const createCollection = () => {
                           transition
                           ease-in-out
                           
-                          focus:text-gray-700
+                          focus:text-gray-300
                         "
                     id="exampleFormControlTextarea13"
                     rows="3"
                     placeholder="Provide a detailed description of your item."
-                  ></textarea>
+                    name={"description"}
+                    value={description}
+                    onChange={handleFormDataChange}
+                  />
                 </div>
 
                 <h2 className="mb-3 text-xl font-bold text-white">Category</h2>
@@ -135,16 +133,20 @@ const createCollection = () => {
                               
                            focus:outline-none"
                     aria-label="select"
+                    name={"category"}
+                    onChange={handleFormDataChange}
+                    value={category}
                   >
                     <option selected>Add category</option>
-                    <option value="1">Art</option>
-                    <option value="2">Photography</option>
-                    <option value="3">Music</option>
-                    <option value="4">Sports</option>
+                    <option value="Art">Art</option>
+                    <option value="Photography">Photography</option>
+                    <option value="Music">Music</option>
+                    <option value="Sports">Sports</option>
                   </select>
                 </div>
 
                 <button
+                    onClick={handleSubmit}
                   type="submit"
                   className="
                       w-34

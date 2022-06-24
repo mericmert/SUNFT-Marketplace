@@ -1,24 +1,30 @@
 import React, { useEffect, useContext, useState } from 'react'
 import Layout from '../components/Layout'
-import { useWeb3 } from '@3rdweb/hooks'
 import { useRouter } from 'next/router'
 import {AuthContext} from '../context/authContext'
 import UserHelper from "../backendHelpers/UserHelper";
 import { WEB3_CONNECTION_SUCCESS, WEB3_CONNECTION_FAILED } from "../backendHelpers/types";
-import { ThreeDots } from  'react-loader-spinner'
-
+import { ThreeDots } from  'react-loader-spinner';
+import {ethers} from "ethers";
 
 export default function login() {
 
   const router = useRouter()
   const {state, dispatch} = useContext(AuthContext);
-  const { connectWallet, address, error } = useWeb3();
   const [loading, setLoading] = useState(true);
+  const [address, setAddress] = useState(null);
 
   
   const connect = async () => {
     try {
-      await connectWallet("injected");
+      if (typeof window  !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts",[]);
+        const signer = provider.getSigner();
+        const _address = await signer.getAddress();
+        setAddress(_address);
+      }
+
       }
       catch (ex) {
         console.log("Hata!", ex);
@@ -30,14 +36,11 @@ export default function login() {
   },[])
 
   useEffect(() => {
-    if (address) {
-      console.log("WEB3_CONNECTION_SUCCESS");
-      dispatch({
-        type: WEB3_CONNECTION_SUCCESS,
-        payload: address
-      })
+    console.log(state);
+    if (address != null) {
+      dispatch({type: WEB3_CONNECTION_SUCCESS, payload: address });
       UserHelper.find({uAddress: address}).then(user => {
-        if (!user) {
+        if (user == null) {
           router.push(`/register/${address}`);
         } else {
           router.push(`/loginUsername/${address}`)
