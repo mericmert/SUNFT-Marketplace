@@ -74,7 +74,36 @@ const createCollection = () => {
                     </div>
                   </div>
                 </div>
+                <div className="form-group mb-6">
+                  <h2 className="mb-3 text-xl font-bold text-white">
+                    Name <span className="text-red-600">*</span>
+                  </h2>
+                  <input
+                      name="name"
+                      type="text"
+                      className="form-control m-0
+                        block
+                        w-full
+                        rounded
+                        border
+                        border-solid
+                        border-black
+                        bg-[#363840]
+                        bg-clip-padding
+                        px-3 py-1.5
+                        text-base
+                        font-normal
+                        text-gray-200
+                        transition
+                        ease-in-out
 
+                        focus:text-gray-300"
+                      id="exampleInput7"
+                      placeholder="Item name"
+                      value={name}
+                      onChange={handleFormDataChange}
+                  />
+                </div>
                 <h2 className="mb-3 text-xl font-bold text-white">
                   Description
                 </h2>

@@ -77,7 +77,7 @@ const Header = () => {
                 </Link>
               </div>
               <div className={style.headerIcon}>
-                <Dropdown></Dropdown>
+                <Dropdown/>
               </div>
               <div className={style.headerIcon}>
                 <Link href="/login">

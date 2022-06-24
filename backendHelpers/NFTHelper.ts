@@ -5,6 +5,7 @@ import axios from 'axios';
 class NFTHelper {
 
     static async find(UID: string, index: number) {
+
         const response = await axios.get(`${APIPath}/nfts/`, { params: {UID, index }});
         const data = await response.data;
         if (data.length === 0) {
@@ -15,7 +16,7 @@ class NFTHelper {
     }
 
     static async findMany(params: Object) {
-        const response = await axios.get(`${APIPath}/nfts/`, { params });
+        const response = await axios.get(`${APIPath}/nfts/`, { params, });
         const data = await response.data;
         let nfts: NFT[] = [];
         for (let i = 0; i < data.length; i++) {

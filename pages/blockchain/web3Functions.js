@@ -131,7 +131,10 @@ export async function createNewNFTContractAndMint(metadata){
     const contract = await factory.deploy();
     const nftContract = new ethers.Contract(contract.address,nftAbi,signer);
      await nftContract.safeMint(await signer.getAddress(),metadata.id,IPFSURL,{gasLimit: 300000});
-    return {address: nftContract.address, dataLink: IPFSURL };
+     const urlData = await axios.get(IPFSURL);
+     const URL = urlData.data.URL;
+     console.log(urlData.data)
+    return {address: nftContract.address, dataLink: URL };
 }
 
 

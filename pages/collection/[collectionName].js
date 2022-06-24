@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import NFTCollectionHelper from '../../backendHelpers/NFTCollectionHelper'
 import { ImagePath } from '../../VARIABLES'
 import Link from 'next/link'
+import UserHelper from "../../backendHelpers/UserHelper";
 
 const collection = ({ collectionName }) => {
   const router = useRouter()
@@ -16,11 +17,12 @@ const collection = ({ collectionName }) => {
   const [filter, setFilter] = useState({
     s: '',
     sort: '',
-  })
+  });
   const [filteredProducts, setFilteredProducts] = useState([])
   const [products, setProducts] = useState([])
   const [token, setToken] = useState('s')
   const [collection, setCollection] = useState(null)
+  const [watchListed, setWatchListed] = useState(false);
 
   useEffect(() => {
     NFTCollectionHelper.find(collectionName).then((collection) => {
@@ -30,7 +32,6 @@ const collection = ({ collectionName }) => {
 
         setProducts(NFTs)
         setFilteredProducts(NFTs)
-        console.log(NFTs)
       })
     })
   }, [setProducts, setFilteredProducts])
@@ -64,6 +65,24 @@ const collection = ({ collectionName }) => {
   }
   const handleChange = (val) => {
     setFilter({ ...filter, sort: val })
+  }
+
+  useEffect(() => {
+    (async() => {
+      const _userWatchListed = await NFTCollectionHelper.isWatchListedBy(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+      setWatchListed(_userWatchListed);
+    })();
+  },[]);
+
+  const handleWatchList = async () => {
+    if (watchListed) {
+      setWatchListed(false);
+      await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+    }
+    else {
+      setWatchListed(true);
+      await UserHelper.addWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+    }
   }
 
   return (
@@ -120,9 +139,9 @@ const collection = ({ collectionName }) => {
           <div className="flex w-full justify-center text-white">
             <div className="mx-10 mb-6 flex text-lg">
               <div className="w-36">
-                <button>
+                <button onClick={handleWatchList}>
                   <div className="container flex justify-between rounded-lg border px-2 text-center text-gray-400 hover:text-white focus:text-white">
-                    <div className="my-2">Add Watchlist</div>
+                    <div className="my-2">{!watchListed ? "Add" : "Remove"} Watchlist</div>
                   </div>
                 </button>
               </div>
@@ -221,7 +240,6 @@ const collection = ({ collectionName }) => {
 export default collection
 
 export async function getServerSideProps(context) {
-  console.log(context)
   return {
     props: { collectionName: context.params.collectionName },
   }

@@ -14,6 +14,7 @@ import {
     SET_AUTH_LOADING,
     REMOVE_AUTH_LOADING,
 } from '../backendHelpers/types';
+import NFTCollection from "../objects/NFTCollection";
 
 
 
@@ -187,6 +188,36 @@ class UserHelper {
         catch (e) {
             return false;
         }
+    }
+
+    static async removeWatchList(uid: string, collectionName: string) {
+        try {
+            await axios.delete(`${APIPath}/watchLists/`, { params: { user: uid, nftCollection: collectionName }});
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    static async addWatchList(uid: string, collectionName: string) {
+        try {
+            await axios.post(`${APIPath}/watchLists/`, {  user: uid, nftCollection: collectionName });
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    static async getWatchLists(uid: string) {
+        const response = await axios.get(`${APIPath}/watchLists/`, { params: { user: uid }});
+        const data = await response.data;
+        let watchLists: NFTCollection[] = [];
+        for (let i = 0; i < data.length; i++) {
+            watchLists.push(new NFTCollection(data[i]));
+        }
+        return watchLists;
     }
 
 }

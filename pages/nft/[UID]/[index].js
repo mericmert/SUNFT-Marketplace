@@ -4,47 +4,52 @@ import { FcAbout } from 'react-icons/fc'
 import { MdFavorite } from 'react-icons/md'
 import { BiPurchaseTag } from 'react-icons/bi'
 import { RiHistoryLine } from 'react-icons/ri'
-import React, { useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import NFTHelper from '../../../backendHelpers/NFTHelper'
 import { ImagePath } from '../../../VARIABLES'
-import { useWeb3 } from '@3rdweb/hooks'
 import NFT from '../../../objects/NFT'
 import Link from 'next/link'
 import Modal from '../../../components/Modal'
 import {AiOutlineUnorderedList} from 'react-icons/ai'
+import {AuthContext} from "../../../context/authContext";
 
 
 
 const price = Math.floor(Math.random() * (250 - 10)) + 10
 const APIKEY = 'apikey 6rdxFXUqMwsvE6293Wccbz:1HYPOFigQ31hydZ74e0ye7'
-function Nft({ Owner, Creator, UID, index, nftObject }) {
+function Nft({ data }) {
+  const { Owner, Creator, UID, index, nftObject } = JSON.parse(data);
   const [equivalentPrice, setEquivalentPrice] = useState(0)
-  const nftobj = new NFT(nftObject)
+  const nftobj = new NFT(nftObject);
   const [likes, setLikes] = useState(nftobj.numLikes)
-  const [isLiked, setIsLiked] = useState(false)
-  const { address } = useWeb3()
+  const [isLiked, setIsLiked] = useState(false);
+  const [uAddress, setUAddress] = useState();
 
-  const handleLikeClick = () => {
-    nftobj.isLikedBy(address).then((response) => {
-      isLiked = response;
-    })
+  const getInitialLike = async () => {
+    const liked = await nftobj.isLikedBy(uAddress);
+    setIsLiked(liked);
+    }
+
+
+  useEffect(() => {
+    getInitialLike();
+    setUAddress(JSON.parse(localStorage.getItem("state")).uAddress);
+  }, []);
+
+  const handleLikeClick = async () =>  {
     if (isLiked) {
-      nftobj.dislike(address)
-      setLikes((prevState) => prevState - 1)
+      setLikes(likes-1);
       setIsLiked(false)
+      await nftobj.dislike(uAddress)
+
     } else {
-      nftobj.like(address)
-      setLikes((prevState) => prevState + 1)
+      setLikes(likes+1)
       setIsLiked(true)
+      await nftobj.like(uAddress)
+
     }
   }
 
-  useEffect(() => {
-      const {uAddress} = JSON.parse(localStorage.getItem("web3-token"));
-      nftobj.isLikedBy(uAddress).then((response) => {
-        setIsLiked(response);
-      })
-  },[likes, isLiked])
 
   /*useEffect(() => {
         (async () =>{
@@ -214,13 +219,12 @@ function Nft({ Owner, Creator, UID, index, nftObject }) {
   )
 }
 
-Nft.getInitialProps = async ({ query }) => {
-  const { UID, index } = query
-  const NFTs = new NFTHelper()
-  const NFT = await NFTs.find(UID, index)
+export async function getServerSideProps(context) {
+  const { UID, index } = context.query
+  const NFT = await NFTHelper.find(UID, index)
   const Owner = await NFT.getOwner()
   const Creator = await NFT.getCreator()
-  return { UID, index, nftObject: NFT, Creator, Owner }
+  return {props: {data: JSON.stringify({UID, index, nftObject: NFT, Creator, Owner})}}
 }
 
 export default Nft

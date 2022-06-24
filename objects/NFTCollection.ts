@@ -83,10 +83,10 @@ class NFTCollection {
         return watchListedUsers;
     }
 
-    async isWatchListedBy(user: string) {
+    async isWatchListedBy(uAddress: string) {
         try {
             const response = await axios.get(`${APIPath}/watchLists/`, {params:
-                    {user, nftCollection: this.getPk() }});
+                    {user: uAddress, nftCollection: this.getPk() }});
             return response.status === 200;
         }
 

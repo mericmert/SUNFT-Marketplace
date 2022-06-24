@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosSettings } from 'react-icons/io'
 import { FiLogOut } from 'react-icons/fi'
 import { BsFillEyeFill, BsCollection } from 'react-icons/bs'
@@ -12,11 +12,15 @@ import {AuthContext} from "../context/authContext";
 
 const Dropdown = () => {
 
-  const { state, dispatch } = useContext(AuthContext);
+  const [state, setState] = useState({});
+  useEffect(() => {
+    setState(JSON.parse(localStorage.getItem("state")));
+  }, []);
+
   return (
     <div>
       <div className="dropdown group relative cursor-pointer flex justify-center">
-        <Link href={`/profile/${state.uAddress}`}>
+        <Link href={`/profile/${state?.uAddress}`}>
           <a>
             <CgProfile />
           </a>
@@ -24,7 +28,7 @@ const Dropdown = () => {
         <div className="dropdown-menu absolute hidden h-auto group-hover:block pt-11">
           <ul className="top-0 w-52 bg-[#18191c] px-6 pt-4 text-gray-400 shadow">
             <li className="pb-4 text-lg font-normal ">
-              <Link href={`/profile/${state.uAddress}`}>
+              <Link href={`/profile/${state?.uAddress}`}>
                 <a
                   className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
                 >
@@ -67,16 +71,14 @@ const Dropdown = () => {
               </Link>
             </li>
 
-          
-
             <li onClick={() => {localStorage.clear()}} className="pb-4 text-lg font-normal">
-              <Link  href="#">
-              <a
-                className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
-              >
-                <FiLogOut className="mr-3 h-6 w-6" />
-                Logout
-              </a>
+              <Link  href="/">
+                <a
+                    className="flex transform items-center border-r-4 border-transparent transition-colors duration-200 hover:border-primary-color-4 hover:text-white"
+                >
+                  <FiLogOut className="mr-3 h-6 w-6" />
+                  Logout
+                </a>
               </Link>
             </li>
           </ul>

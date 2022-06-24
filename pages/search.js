@@ -5,7 +5,7 @@ import ProfileCard from '../components/ProfileCard'
 import SearchCollectionCard from '../components/SearchCollectionCard'
 import nftData from '../mock_data/item_data.json'
 import Router,{ useRouter } from 'next/router'
-import { ImagePath } from '../VARIABLES'
+import {APIPath, ImagePath} from '../VARIABLES'
 
 const search = ({nfts,collections,text}) => {
     const router = useRouter()
@@ -69,7 +69,9 @@ const search = ({nfts,collections,text}) => {
 
           <div className="container my-6 mx-auto flex justify-center pt-4">
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredNFTS.map((nft) => (
+              {filteredNFTS.map((nft) => {
+                console.log(nft);
+                return (
                 <ProfileCard
                   key={nft.id}
                   username={nft.owner}
@@ -78,8 +80,11 @@ const search = ({nfts,collections,text}) => {
                   like={nft.numLikes}
                   eth_price={24}
                   desc={nft.description}
+                  uid={nft.UID}
+                  idx={nft.index}
                 />
-              ))}
+                )
+                })}
             </div>
           </div>
       </Layout>
@@ -92,7 +97,7 @@ export default search
 export async function getServerSideProps(context){
   const searchText = context.query.searchText;
   let collectionList, nftList
-  await fetch(`http:mertd./api/nftcollections`,{
+  await fetch(`${APIPath}/nftcollections`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +110,7 @@ export async function getServerSideProps(context){
   .then(collection_data => {
     collectionList = collection_data;
   })
-  await fetch(`http://localhost:8000/api/nfts/`,{
+  await fetch(`${APIPath}/nfts/`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",

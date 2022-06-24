@@ -33,9 +33,11 @@ const register = ({ uAddress }) => {
   useEffect(() => {
     UserHelper._initialize(dispatch);
     if (state.register_success) {
-      setLoading(false);
       console.log("Succesfully registered!");
       router.push("/");
+      setLoading(false);
+    }
+    else{
       setLoading(false);
     }
   }, [state])
