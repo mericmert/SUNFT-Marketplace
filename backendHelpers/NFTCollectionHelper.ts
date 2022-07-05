@@ -46,6 +46,9 @@ class NFTCollectionHelper {
     }
 
     static async isWatchListedBy(uAddress: string, collectionName: string) {
+        if (uAddress == null) {
+            return false;
+        }
         try {
             const response = await axios.get(`${APIPath}/watchLists/`, {params:
                     {user: uAddress, nftCollection: collectionName }});

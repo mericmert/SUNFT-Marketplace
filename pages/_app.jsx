@@ -1,25 +1,19 @@
 import '../styles/globals.css'
 import '../styles/hamburger_menu.css'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import { AuthProvider } from '../context/authContext'
-import { AppProps } from 'next/app'
-import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
 import "regenerator-runtime/runtime";
+import { store, persistor } from '../app/store'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 function MyApp({ Component, pageProps }) {
-  const supportedChainIds = [1, 4];
-  const connectors = {
-    injected: {},
-  }; 
+
   return (
-    <ThirdwebWeb3Provider
-      supportedChainIds={supportedChainIds}
-      connectors={connectors}
-    >
-      <AuthProvider>
+      <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
         <Component {...pageProps} />
-      </AuthProvider>
-    </ThirdwebWeb3Provider>
+          </PersistGate>
+      </Provider>
   )
 }
 

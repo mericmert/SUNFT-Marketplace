@@ -1,25 +1,28 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext } from '../../../context/AuthContext'
+import React, { useState, useEffect } from 'react'
 import {useRouter} from 'next/router'
 import UserHelper from "../../../backendHelpers/UserHelper";
+import {useDispatch, useSelector} from "react-redux";
 
 const Verification = ({ uid, token }) => {
-
-
     const router = useRouter();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(undefined);
-    const { state, dispatch } = useContext(AuthContext);
-    const Users = new UserHelper(dispatch);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
+    const uAddress = useSelector(state => state.uAddress);
+
+    useEffect(() => {
+        UserHelper._initialize(dispatch);
+    }, [])
 
     const handleVerification = async (e) => {
         e.preventDefault();
-            await Users.login(username, password);
-            if (state.user && state.user.uAddress === state.uAddress) {
+            await UserHelper.login(username, password);
+            if (user != null && user.uAddress === uAddress) {
                 const userVerified = await Users.activateUser(uid, token);
                 if (userVerified) {
-                    router.push("/");
+                    await router.push("/");
                 }
                 else {
                     setError("verification is not successful")

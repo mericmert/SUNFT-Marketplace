@@ -1,18 +1,19 @@
-import React, { useContext, useState, useEffect  } from 'react'
-import { AuthContext } from "../../context/authContext";
+import React, { useState, useEffect  } from 'react'
 import UserHelper from "../../backendHelpers/UserHelper";
 import { useRouter} from "next/router";
 import { ThreeDots } from  'react-loader-spinner'
+import {useDispatch, useSelector} from "react-redux";
 
 
 const loginUsername = ({ uAddress }) => {
 
-    const { state, dispatch } = useContext(AuthContext);
     const router = useRouter();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(undefined);
     const [loading, setLoading] = useState(true);
+    const isAuthenticated = useSelector(state => state.isAuthenticated);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +22,7 @@ const loginUsername = ({ uAddress }) => {
     
     useEffect(() => {
         UserHelper._initialize(dispatch);
-        if (state.isAuthenticated) {
+        if (isAuthenticated) {
             router.push(`/profile/${uAddress}`);
             setLoading(false);
         }
@@ -29,7 +30,7 @@ const loginUsername = ({ uAddress }) => {
             setLoading(false);
             setError("Try again.")
         }
-    }, [state])
+    }, [isAuthenticated])
 
     return (
         <>

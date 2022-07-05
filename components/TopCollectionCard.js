@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { ImagePath } from '../VARIABLES'
 import Link from 'next/link'
-import NFTHelper from '../backendHelpers/NFTHelper';
 import NFTCollectionHelper from '../backendHelpers/NFTCollectionHelper';
 import UserHelper from '../backendHelpers/UserHelper';
+import {useSelector} from "react-redux";
 
 function TopCollectionCard({collection, idx}) {
     const [isWatched, setIsWatched] = useState(false);
+    const uAddress = useSelector(state => state.uAddress);
     useEffect(() => {
         (async () => {
-            const _isWatched = await NFTCollectionHelper.isWatchListedBy(JSON.parse(localStorage.getItem("state"))?.uAddress, collection.name)
+            const _isWatched = await NFTCollectionHelper.isWatchListedBy(uAddress, collection.name)
             setIsWatched(_isWatched);
         })()
     },[])
     const handleWatchList = async () => {
         if (isWatched) {
           setIsWatched(false);
-          await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collection.name);
+          await UserHelper.removeWatchList(uAddress, collection.name);
         }
         else {
           setIsWatched(true);
-          await UserHelper.addWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collection.name);
+          await UserHelper.addWatchList(uAddress, collection.name);
         }
       }
     return (

@@ -1,29 +1,34 @@
-import React, {useContext, useEffect, useReducer, useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import Layout from '../components/Layout'
 import useInput from "../hooks/useInputState";
-import {AuthContext} from "../context/authContext";
 import {useRouter} from "next/router";
 import {createNewNFTContractAndMint} from "./blockchain/web3Functions";
 import NFTCollectionHelper from "../backendHelpers/NFTCollectionHelper";
-import NFTCollectionCategoryHelper from "../backendHelpers/NFTCollectionCategoryHelper";
 import NFT from "../objects/NFT";
 import NFTHelper from "../backendHelpers/NFTHelper";
+import {useSelector} from "react-redux";
 
 
 const CreateNFT = () => {
   const [formData, handleFormDataChange, resetFormData] = useInput({ dataType: null, name: "", description: "", collection: "", id: null});
   const { id, dataType, name, description, collection } = formData;
   const [media, setMedia] = useState(null);
-  const { state, _ } = useContext(AuthContext);
   const router = useRouter();
   const [categories, setCategories] = useState([]);
+  const user = useSelector(state => state.user);
 
   const handleMediaSelect = (e) => {
     setMedia(e.target.files[0]);
   }
+
+  const getNFTCollections = async () => {
+    const categories = await NFTCollectionHelper.findMany({owner: user.username });
+    setCategories(categories);
+  }
+
   useEffect(() => {
-    (async () => getNFTCollections())();
-    if (typeof JSON.parse(localStorage.getItem("state")).uAddress != "string") {
+    (async () => await getNFTCollections())();
+    if (user == null) {
       router.push("/login");
     }
 
@@ -32,23 +37,20 @@ const CreateNFT = () => {
   useEffect(() => {
     if (categories.length !== 0) {
       handleFormDataChange({target: {name: "collection", value: categories[0].name }});
-    };
+    }
   }, [categories])
 
-  const getNFTCollections = async () => {
-    const categories = await NFTCollectionHelper.findMany({owner: JSON.parse(localStorage.getItem("state")).user.username});
-    setCategories(categories);
-  }
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     console.log(collection);
     const nftData = await createNewNFTContractAndMint({...formData, media });
-    const newNFT = new NFT({index: id, UID: nftData.address, name, description, metaDataType: dataType, creator: JSON.parse(localStorage.getItem("state")).uAddress,
-    collectionName: collection, currentOwner: JSON.parse(localStorage.getItem("state")).user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0, nftFile: media});
+    const newNFT = new NFT({index: id, UID: nftData.address, name, description, metaDataType: dataType, creator: user.uAddress,
+    collectionName: collection, currentOwner: user.uAddress, marketStatus: 0, dataLink: nftData.dataLink, numLikes: 0, nftFile: media});
     console.log(newNFT);
     await NFTHelper.add(newNFT);
-
+    resetFormData();
   }
 
   useEffect(() => {

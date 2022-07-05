@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import ProfileCard from '../components/ProfileCard'
 
-import {AuthContext} from "../context/authContext";
 
 import UserHelper from "../backendHelpers/UserHelper";
 import { ImagePath } from "../VARIABLES";
+import {useSelector} from "react-redux";
 
 
 const favorites = () => {
-    const { state, dispatch } = useContext(AuthContext);
     const [likes, setLikes] = useState([])
+    const uAddress = useSelector(state => state.uAddress);
 
     useEffect(() => {
-      const adress = JSON.parse(localStorage.getItem("state")).uAddress;
-        UserHelper.find({ uAddress: adress }).then(user => {
+        UserHelper.find({ uAddress }).then(user => {
             user.getLikes().then(lk => {
                 setLikes(lk);
             })

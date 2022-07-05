@@ -1,15 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { AuthContext } from "../context/authContext";
+import React from 'react';
 import 'flowbite'
-import { FaEthereum } from 'react-icons/fa'
 import UserHelper from "../backendHelpers/UserHelper";
 import {ImagePath} from "../VARIABLES";
+import {useSelector} from "react-redux";
 
 
 const Table = ({ watchLists, handleClick }) => {
-
+  const uAddress = useSelector(state => state.uAddress);
   const handleButtonClick = (idx) => async () => {
-    await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, watchLists[idx].collectionName);
+    await UserHelper.removeWatchList(uAddress, watchLists[idx].collectionName);
     handleClick();
   }
 

@@ -1,14 +1,8 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../context/authContext'
-import {useRouter} from 'next/router'
+import React from 'react'
 const Verification = () => {
-  const {isWeb3Active,setLogin} = useContext(AuthContext)
-  const router = useRouter();
+
   const handleVerification = async (e) => {
-    //POST REQUEST
-    // activate
-    await setLogin(true);
-    router.push("/")
+
   }
 
   const [username, setUsername] = useState('')

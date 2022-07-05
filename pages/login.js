@@ -1,16 +1,16 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { useRouter } from 'next/router'
-import {AuthContext} from '../context/authContext'
 import UserHelper from "../backendHelpers/UserHelper";
 import { WEB3_CONNECTION_SUCCESS, WEB3_CONNECTION_FAILED } from "../backendHelpers/types";
 import { ThreeDots } from  'react-loader-spinner';
 import {ethers} from "ethers";
+import { useDispatch } from 'react-redux'
+import {setWeb3Address} from "../slices/authSlice";
 
 export default function login() {
-
+  const dispatch = useDispatch();
   const router = useRouter()
-  const {state, dispatch} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState(null);
 
@@ -37,7 +37,7 @@ export default function login() {
 
   useEffect(() => {
     if (address != null) {
-      dispatch({type: WEB3_CONNECTION_SUCCESS, payload: address });
+      dispatch(setWeb3Address(address));
       UserHelper.find({uAddress: address}).then(user => {
 
         if (user == false) {
@@ -49,10 +49,7 @@ export default function login() {
       })
     }
     else {
-      console.log("WEB3_CONNECTION_FAILED")
-      dispatch({
-        type: WEB3_CONNECTION_FAILED
-      })
+      dispatch(setWeb3Address(null));
       setTimeout(() => {
         setLoading(false);
       },100)

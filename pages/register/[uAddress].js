@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { AuthContext } from '../../context/authContext';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import UserHelper from "../../backendHelpers/UserHelper";
-import { RESET_REGISTER_SUCCESS } from "../../backendHelpers/types";
 import { ThreeDots } from  'react-loader-spinner'
+import {useDispatch, useSelector} from "react-redux";
 
 const register = ({ uAddress }) => {
 
-  const { state, dispatch } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [re_password, setRepassword] = useState('');

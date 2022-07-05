@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import dynamic from 'next/dynamic'
 import Layout from '../components/Layout'
 import UserHelper from "../backendHelpers/UserHelper";
+import {useSelector} from "react-redux";
 
 const Table = dynamic(
   () => {
@@ -11,15 +12,16 @@ const Table = dynamic(
 )
 
 const watchList = () => {
+    const uAddress = useSelector(state => state.uAddress);
     const [watchLists, setWatchLists] = useState([]);
     useEffect(() => {
         (async () => {
-            let _watchLists = await UserHelper.getWatchLists(JSON.parse(localStorage.getItem("state")).uAddress);
+            let _watchLists = await UserHelper.getWatchLists(uAddress);
             setWatchLists(_watchLists);
         })();
     }, []);
     const handleTableItemClick = async () => {
-        let _watchLists = await UserHelper.getWatchLists(JSON.parse(localStorage.getItem("state")).uAddress);
+        let _watchLists = await UserHelper.getWatchLists(uAddress);
         setWatchLists(_watchLists);
     }
   return (

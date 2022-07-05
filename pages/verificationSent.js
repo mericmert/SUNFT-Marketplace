@@ -1,19 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { MdMarkEmailRead } from 'react-icons/md'
-import { AuthContext } from '../context/authContext'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
+import {useSelector} from "react-redux";
+
 const Verification = () => {
-  const { isWeb3Active, setLogin } = useContext(AuthContext)
   const router = useRouter()
+  const uAddress = useSelector(state => state.uAddress);
   const handleVerification = async (e) => {
-    //POST REQUEST
-    // activate
-    await setLogin(true)
-    router.push('/')
+    await router.push('/')
   }
 
-  if (isWeb3Active) {
+  if (uAddress != null) {
     return (
         <Layout>
           <div>
@@ -31,7 +29,7 @@ const Verification = () => {
         </Layout>
     )
   } else {
-    return <h1>Login olmadın!</h1>
+    return <h1>You Didn't Login!</h1>
   }
 }
 

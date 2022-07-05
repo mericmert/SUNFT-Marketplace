@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
-import { CgWebsite } from 'react-icons/cg'
-import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
-import { HiDotsVertical } from 'react-icons/hi'
 import ProfileCard from '../../components/ProfileCard'
-import { MdAddCircleOutline } from 'react-icons/md'
-import { useRouter } from 'next/router'
 import NFTCollectionHelper from '../../backendHelpers/NFTCollectionHelper'
 import { ImagePath } from '../../VARIABLES'
 import Link from 'next/link'
 import UserHelper from "../../backendHelpers/UserHelper";
+import {useSelector} from "react-redux";
 
 const collection = ({ collectionName }) => {
-  const router = useRouter()
+  const uAddress = useSelector(state => state.uAddress);
 
   const [filter, setFilter] = useState({
     s: '',
@@ -69,7 +65,7 @@ const collection = ({ collectionName }) => {
 
   useEffect(() => {
     (async() => {
-      const _userWatchListed = await NFTCollectionHelper.isWatchListedBy(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+      const _userWatchListed = await NFTCollectionHelper.isWatchListedBy(uAddress, collectionName);
       setWatchListed(_userWatchListed);
     })();
   },[]);
@@ -77,11 +73,11 @@ const collection = ({ collectionName }) => {
   const handleWatchList = async () => {
     if (watchListed) {
       setWatchListed(false);
-      await UserHelper.removeWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+      await UserHelper.removeWatchList(uAddress, collectionName);
     }
     else {
       setWatchListed(true);
-      await UserHelper.addWatchList(JSON.parse(localStorage.getItem("state")).uAddress, collectionName);
+      await UserHelper.addWatchList(uAddress, collectionName);
     }
   }
 
@@ -139,7 +135,7 @@ const collection = ({ collectionName }) => {
           <div className="flex w-full justify-center text-white">
             <div className="mx-10 mb-6 flex text-lg">
               <div className="w-36">
-                <button onClick={handleWatchList}>
+                <button onClick={handleWatchList} disabled={uAddress == null}>
                   <div className="container flex justify-between rounded-lg border px-2 text-center text-gray-400 hover:text-white focus:text-white">
                     <div className="my-2">{!watchListed ? "Add" : "Remove"} Watchlist</div>
                   </div>

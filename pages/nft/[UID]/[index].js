@@ -1,19 +1,17 @@
+import React, { useEffect, useState} from 'react'
 import Layout from '../../../components/Layout'
 import { FaEthereum } from 'react-icons/fa'
 import { FcAbout } from 'react-icons/fc'
 import { MdFavorite } from 'react-icons/md'
-import { BiPurchaseTag } from 'react-icons/bi'
 import { RiHistoryLine } from 'react-icons/ri'
-import React, {useContext, useEffect, useState} from 'react'
+
 import NFTHelper from '../../../backendHelpers/NFTHelper'
 import { ImagePath } from '../../../VARIABLES'
 import NFT from '../../../objects/NFT'
 import Link from 'next/link'
 import Modal from '../../../components/Modal'
 import {AiOutlineUnorderedList} from 'react-icons/ai'
-import {AuthContext} from "../../../context/authContext";
-
-
+import {useSelector} from "react-redux";
 
 const price = Math.floor(Math.random() * (250 - 10)) + 10
 const APIKEY = 'apikey 6rdxFXUqMwsvE6293Wccbz:1HYPOFigQ31hydZ74e0ye7'
@@ -23,17 +21,15 @@ function Nft({ data }) {
   const nftobj = new NFT(nftObject);
   const [likes, setLikes] = useState(nftobj.numLikes)
   const [isLiked, setIsLiked] = useState(false);
-  const [uAddress, setUAddress] = useState();
+  const uAddress = useSelector(state => state.uAddress);
 
-  const getInitialLike = async () => {
-    const liked = await nftobj.isLikedBy(uAddress);
-    setIsLiked(liked);
-    }
 
 
   useEffect(() => {
-    getInitialLike();
-    setUAddress(JSON.parse(localStorage.getItem("state")).uAddress);
+    (async () => {
+      const liked = await nftobj.isLikedBy(uAddress);
+      setIsLiked(liked);
+    })();
   }, []);
 
   const handleLikeClick = async () =>  {

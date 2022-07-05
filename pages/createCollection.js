@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import Layout from '../components/Layout';
 import useInput from "../hooks/useInputState";
 import NFTCollection from "../objects/NFTCollection";
 import NFTCollectionHelper from "../backendHelpers/NFTCollectionHelper";
 import {useRouter} from "next/router";
+import {useSelector} from "react-redux";
 
 
 const createCollection = () => {
@@ -11,18 +12,25 @@ const createCollection = () => {
   const [media, setMedia] = useState(null);
   const { name, category, description } = formData;
   const router = useRouter();
+  const user = useSelector(state => state.user);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newCollection = new NFTCollection({name, description, owner: JSON.parse(localStorage.getItem("state")).user.username, category, numLikes: 0, collectionImage: media});
+    const newCollection = new NFTCollection({name, description, owner: user.username, category, numLikes: 0, collectionImage: media});
     await NFTCollectionHelper.add(newCollection);
-    router.push("/myCollections");
+    await router.push("/myCollections");
 
   }
   const handleMediaSelect = (e) => {
     setMedia(e.target.files[0]);
   }
+
+  useEffect(() => {
+    if (user == null) {
+      router.push("/login");
+    }
+  }, [user])
 
 
   return (

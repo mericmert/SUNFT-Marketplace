@@ -1,21 +1,14 @@
 import { APIPath, AuthPath } from "../VARIABLES";
 import User from '../objects/User';
 import axios from 'axios';
-
-import {
-    REGISTER_SUCCESS,
-    REGISTER_FAIL,
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOAD_USER_SUCCESS,
-    LOAD_USER_FAIL,
-    REFRESH_SUCCESS,
-    REFRESH_FAIL,
-    SET_AUTH_LOADING,
-    REMOVE_AUTH_LOADING,
-} from '../backendHelpers/types';
 import NFTCollection from "../objects/NFTCollection";
-
+import {
+    loadUser, login,
+    refreshAccessToken,
+    refreshAccessTokenFailed,
+    setAuthLoading,
+    setRegisterSuccess
+} from "../slices/authSlice";
 
 
 class UserHelper {
@@ -61,37 +54,24 @@ class UserHelper {
     }
 
      static async register(user: Object) {
-        UserHelper.dispatch({
-            type: SET_AUTH_LOADING
-        });
+        UserHelper.dispatch(setAuthLoading(true));
         try {
             const response = await axios.post(`${AuthPath}/users/`, user);
             if (response.status === 201) {
-                UserHelper.dispatch({
-                    type: REGISTER_SUCCESS
-                });
+                UserHelper.dispatch(setRegisterSuccess(true));
             } else {
-                console.log("ZORT");
-                UserHelper.dispatch({
-                    type: REGISTER_FAIL
-                });
+                UserHelper.dispatch(setRegisterSuccess(false));
             }
         }
          catch(err) {
             console.log(err);
-            UserHelper.dispatch({
-                type: REGISTER_FAIL
-            });
+             UserHelper.dispatch(setRegisterSuccess(false));
         }
 
-        UserHelper.dispatch({
-            type: REMOVE_AUTH_LOADING
-        });
+         UserHelper.dispatch(setAuthLoading(false));
     }
 
     static async getJWTs(username: string, password: string) {
-        console.log("AT JWTS", `${AuthPath}/jwt/create/`)
-
         try {
             const response = await axios.post(`${AuthPath}/jwt/create/`, {username, password});
             const tokens = await response.data;
@@ -108,75 +88,51 @@ class UserHelper {
             const response = await axios.post(`${AuthPath}/jwt/refresh/`, { refresh });
             if (response.status === 200) {
                 const tokenObj = await response.data;
-                UserHelper.dispatch({
-                    type: REFRESH_SUCCESS,
-                    payload: tokenObj.access
-                });
+                UserHelper.dispatch(refreshAccessToken(tokenObj.access));
             }
             else {
-                this.dispatch({
-                    type: REFRESH_FAIL,
-                });
+                UserHelper.dispatch(refreshAccessTokenFailed());
             }
         }
         catch (e) {
-            this.dispatch({
-                type: REFRESH_FAIL,
-            });
+            UserHelper.dispatch(refreshAccessTokenFailed());
         }
     }
 
     static async loadUser(accessToken: string) {
-        UserHelper.dispatch({
-            type: SET_AUTH_LOADING
-        });
+        UserHelper.dispatch(setAuthLoading(true));
         try {
             //PROBLEM
             const res = await axios.get(`${AuthPath}/users/me/`, {headers: {"Authorization": `JWT ${accessToken}`}});
             const data = await res.data;
             if (res.status === 200) {
-                UserHelper.dispatch({
-                    type: LOAD_USER_SUCCESS,
-                    payload: { user: data }
-                });
+                UserHelper.dispatch(loadUser(data));
             }
             else {
-                UserHelper.dispatch({
-                    type: LOAD_USER_FAIL
-                });
+                UserHelper.dispatch(loadUser(null));
             }
         }
         catch(e) {
-            UserHelper.dispatch({
-                type: LOAD_USER_FAIL
-            });
+            UserHelper.dispatch(loadUser(null));
         }
-        UserHelper.dispatch({
-            type: REMOVE_AUTH_LOADING
-        })
+        UserHelper.dispatch(setAuthLoading(false));
     }
 
     static async login(username: string, password: string) {
 
-        UserHelper.dispatch({
-            type: SET_AUTH_LOADING
-        });
+        UserHelper.dispatch(setAuthLoading(true));
 
         try {
             let tokens = await UserHelper.getJWTs(username, password);
 
-            UserHelper.dispatch({
-                type: LOGIN_SUCCESS,
-            });
+            UserHelper.dispatch(login(true));
             const { access } = tokens;
             console.log("Tokens", tokens);
             console.log("access", access);
             await UserHelper.loadUser(access);
         }
         catch (e) {
-            UserHelper.dispatch({
-                type: LOGIN_FAIL
-            });
+            UserHelper.dispatch(login(false));
         }
     }
 
