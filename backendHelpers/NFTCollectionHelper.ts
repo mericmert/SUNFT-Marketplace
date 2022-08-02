@@ -5,8 +5,8 @@ import FormData from "form-data";
 
 class NFTCollectionHelper {
 
-    static async find(name: string) {
-        const response = await axios.get(`${APIPath}/nftcollections/`, { params: { name }});
+    static async find(address: string) {
+        const response = await axios.get(`${APIPath}/nftcollections/`, { params: {address} });
         const data = await response.data;
         if (data.length === 0) {
             return false;

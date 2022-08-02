@@ -15,7 +15,7 @@ import {useSelector} from "react-redux";
 const price = Math.floor(Math.random() * (250 - 10)) + 10
 const APIKEY = 'apikey 6rdxFXUqMwsvE6293Wccbz:1HYPOFigQ31hydZ74e0ye7'
 function Nft({ data }) {
-  const { Owner, Creator, UID, index, nftObject } = JSON.parse(data);
+  const { Owner, Creator, address, nID, nftObject } = JSON.parse(data);
   const [equivalentPrice, setEquivalentPrice] = useState(0)
   const nftobj = new NFT(nftObject);
   const [likes, setLikes] = useState(nftobj.numLikes)
@@ -69,12 +69,14 @@ function Nft({ data }) {
       <div className="m-auto flex h-full w-5/6 flex-col gap-y-4 overflow-hidden rounded-md sm:w-3/4  ">
         <div className="flex flex-col items-center justify-start gap-x-4 sm:flex-row">
           <div>
-            <div className="text-center text-sm">
-              <p className="text-gray-400">
-                Created by{' '}
-                <span className="text-indigo-500">{Creator.username}</span>
-              </p>
-            </div>
+            <Link href={`/profile/${Creator.uAddress}`}>
+              <a className="text-center text-sm">
+                <p className="text-gray-400">
+                  Created by{' '}
+                  <span className="text-indigo-500">{Creator.username}</span>
+                </p>
+              </a>
+            </Link>
             <img
               className="h-96 w-[32rem] rounded-lg object-cover"
               src={nftobj && `${nftobj.nftFile}`}
@@ -82,10 +84,10 @@ function Nft({ data }) {
           </div>
           <div className="flex w-full flex-col">
             <div className="my-4 flex flex-col justify-center text-center  sm:my-0 md:text-left">
-              <Link href={`/collection/${nftobj.collectionName}`}>
+              <Link href={`/address/${nftobj.addressName}`}>
                 <a>
                   <h1 className="text-primary-color-5">
-                    {nftobj.collectionName}
+                    {nftobj.addressName}
                   </h1>
                 </a>
               </Link>
@@ -94,7 +96,7 @@ function Nft({ data }) {
               </h1>
               <p className="text-gray-400">
                 Owned by{' '}
-                <Link href={`/profile/${Owner.username}`}>
+                <Link href={`/profile/${Owner.uAddress}`}>
                   <a>
                     <span className="text-primary-color-5">
                       {Owner.username}
@@ -215,11 +217,11 @@ function Nft({ data }) {
 }
 
 export async function getServerSideProps(context) {
-  const { UID, index } = context.query
-  const NFT = await NFTHelper.find(UID, index)
+  const { address, nID } = context.query
+  const NFT = await NFTHelper.find(address, nID)
   const Owner = await NFT.getOwner()
   const Creator = await NFT.getCreator()
-  return {props: {data: JSON.stringify({UID, index, nftObject: NFT, Creator, Owner})}}
+  return {props: {data: JSON.stringify({address, nID, nftObject: NFT, Creator, Owner})}}
 }
 
 export default Nft

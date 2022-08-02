@@ -26,7 +26,7 @@ function TopCollectionCard({collection, idx}) {
     return (
         <tr className="border-b border-primary-color-6 transition duration-300 ease-in-out hover:bg-primary-color-hover">
           <td className="whitespace-nowrap px-6 py-4 text-sm font-light text-white">
-            <Link href={`/collection/${collection.name}`}>
+            <Link href={`/collection/${collection.address}`}>
               <a>
                 <div className="flex items-center space-x-2">
                   <div className="space-y-1 font-medium">

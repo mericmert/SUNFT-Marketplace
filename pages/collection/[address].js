@@ -6,7 +6,7 @@ import Link from 'next/link'
 import UserHelper from "../../backendHelpers/UserHelper";
 import {useSelector} from "react-redux";
 
-const collection = ({ collectionName }) => {
+const collection = ({ address }) => {
   const uAddress = useSelector(state => state.uAddress);
 
   const [filter, setFilter] = useState({
@@ -20,7 +20,7 @@ const collection = ({ collectionName }) => {
   const [watchListed, setWatchListed] = useState(false);
 
   useEffect(() => {
-    NFTCollectionHelper.find(collectionName).then((collection) => {
+    NFTCollectionHelper.find(address).then((collection) => {
       setCollection(collection)
       collection.getNFTs().then((NFTs) => {
         NFTs = NFTs.map((nft, indx) => ({ ...nft, price: indx * 8 + 13 }))
@@ -64,7 +64,7 @@ const collection = ({ collectionName }) => {
 
   useEffect(() => {
     (async() => {
-      const _userWatchListed = await NFTCollectionHelper.isWatchListedBy(uAddress, collectionName);
+      const _userWatchListed = await NFTCollectionHelper.isWatchListedBy(uAddress, address);
       setWatchListed(_userWatchListed);
     })();
   },[]);
@@ -72,11 +72,11 @@ const collection = ({ collectionName }) => {
   const handleWatchList = async () => {
     if (watchListed) {
       setWatchListed(false);
-      await UserHelper.removeWatchList(uAddress, collectionName);
+      await UserHelper.removeWatchList(uAddress, address);
     }
     else {
       setWatchListed(true);
-      await UserHelper.addWatchList(uAddress, collectionName);
+      await UserHelper.addWatchList(uAddress, address);
     }
   }
 
@@ -236,6 +236,6 @@ export default collection
 
 export async function getServerSideProps(context) {
   return {
-    props: { collectionName: context.params.collectionName },
+    props: { address: context.params.address },
   }
 }

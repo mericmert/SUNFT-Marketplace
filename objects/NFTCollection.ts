@@ -11,19 +11,21 @@ class NFTCollection {
     category: string | null;
     numLikes: number;
     collectionImage: string | null;
+    address: string;
 
-    constructor({name, description, owner, category, numLikes, collectionImage }:
-                    { name:string; description:string | null; owner: string; category: string | null; numLikes: number; collectionImage: any; }) {
+    constructor({name, description, owner, category, numLikes, collectionImage, address }:
+                    { name:string; description:string | null; owner: string; category: string | null; numLikes: number; collectionImage: any; address: string; }) {
         this.name = name;
         this.description = description;
         this.owner = owner;
         this.category = category;
         this.numLikes = numLikes;
         this.collectionImage = collectionImage;
+        this.address = address;
     }
 
     getPk() {
-        return this.name;
+        return this.address;
     }
 
     toString() {
@@ -31,7 +33,7 @@ class NFTCollection {
     }
 
     async getNFTs() {
-        const response = await axios.get(`${APIPath}/nfts`, { params: { collectionName: this.getPk() }});
+        const response = await axios.get(`${APIPath}/nfts`, { params: { collection: this.getPk() }});
         const data = await response.data;
         const NFTs: NFT[] = [];
         for (let i = 0; i < data.length; i++) {

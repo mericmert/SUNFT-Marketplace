@@ -114,8 +114,8 @@ function Profile({ username, user, nfts }) {
                             eth_price={nft.price}
                             image={nft.dataLink}
                             desc={nft.description}
-                            uid = {nft.UID}
-                            idx = {nft.index}
+                            uid = {nft.address}
+                            idx = {nft.nID}
                         />
                     ))}
                 </div>
@@ -133,7 +133,7 @@ Profile.getInitialProps = async ({ query }) => {
         nfts = nfts.map((nft,indx) => ({...nft,price:(indx * 8 + 13)}));
     }
     else{
-        
+
     }
     return { uAddress, user, nfts };
 }

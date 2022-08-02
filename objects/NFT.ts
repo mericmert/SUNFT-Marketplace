@@ -6,13 +6,13 @@ import { APIPath } from '../VARIABLES';
 import FormData from "form-data";
 
 class NFT {
-    UID: string;
-    index: number;
+    address: string;
+    nID: number;
     name: string;
     description: string | null;
     metaDataType: string;
     dataLink: string | null;
-    collectionName: string | null;
+    addressName: string | null;
     creator: string;
     currentOwner: string;
     marketStatus: number;
@@ -20,13 +20,13 @@ class NFT {
     numLikes: number;
 
     constructor({
-                    UID,
-                    index,
+                    address,
+                    nID,
                     name,
                     description,
                     metaDataType,
                     dataLink,
-                    collectionName,
+                    addressName,
                     creator,
                     currentOwner,
                     marketStatus,
@@ -34,13 +34,13 @@ class NFT {
                     numLikes}
                     :
                 {
-                    UID: string,
-                    index: number,
+                    address: string,
+                    nID: number,
                     name: string,
                     description: string | null,
                     metaDataType: string,
                     dataLink: string,
-                    collectionName: string | null,
+                    addressName: string | null,
                     creator: string,
                     currentOwner: string,
                     marketStatus: number,
@@ -48,13 +48,13 @@ class NFT {
                     numLikes: number
                 }) {
 
-        this.UID = UID;
-        this.index = index;
+        this.address = address;
+        this.nID = nID;
         this.name = name;
         this.description = description;
         this.metaDataType = metaDataType;
         this.dataLink = dataLink;
-        this.collectionName = collectionName;
+        this.addressName = addressName;
         this.creator = creator;
         this.currentOwner = currentOwner;
         this.marketStatus = marketStatus;
@@ -63,7 +63,7 @@ class NFT {
     }
 
     getPk() {
-        return { UID: this.UID, index: this.index };
+        return { address: this.address, nID: this.nID };
     }
 
     toString() {
@@ -95,24 +95,30 @@ class NFT {
     }
 
     async like(user: string) {
-        console.log("like running")
-        try {
-            const response = await axios.post(`${APIPath}/favorites/`, {...this.getPk(), user: user});
-            return response.status === 201;
+        const data = {...this.getPk(), user: user};
+        if (data.address.length != 0 && data.nID.toString().length != 0 && user.length != 0) {
+            try {
+                const response = await axios.post(`${APIPath}/favorites/`, data);
+                return response.status === 201;
+            }
+            catch (e) {
+                return false;
+            }
         }
-        catch (e) {
-            return false;
-        }
+        return false;
     }
 
     async dislike(user: string) {
-        try {
-            const response = await axios.delete(`${APIPath}/favorites/`, {data: {...this.getPk(), user}});
-            return response.status === 200;
+        const data = {...this.getPk(), user: user};
+        if (data.address.length != 0 && data.nID.toString().length != 0 && user.length != 0) {
+            try {
+                const response = await axios.delete(`${APIPath}/favorites/`, {data});
+                return response.status === 200;
+            } catch (e) {
+                return false;
+            }
         }
-        catch (e) {
-            return false;
-        }
+        return false;
     }
 
     async isLikedBy(user: string) {

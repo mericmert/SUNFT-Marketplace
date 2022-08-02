@@ -36,6 +36,8 @@ const favorites = () => {
                     eth_price={5}
                     image={`${nft.nftFile}`}
                     desc={nft.description}
+                    uid={nft.address}
+                    idx={nft.nID}
                     />
                 ))}
             </div>

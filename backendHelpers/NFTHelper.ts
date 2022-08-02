@@ -4,13 +4,14 @@ import axios from 'axios';
 
 class NFTHelper {
 
-    static async find(UID: string, index: number) {
+    static async find(address: string, nID: number) {
 
-        const response = await axios.get(`${APIPath}/nfts/`, { params: {UID, index }});
+        const response = await axios.get(`${APIPath}/nfts/`, { params: { collection: address, nID: nID }});
         const data = await response.data;
         if (data.length === 0) {
             return false;
         }
+        console.log(data[0]);
         const nft: NFT = new NFT(data[0]);
         return nft;
     }
