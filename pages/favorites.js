@@ -4,7 +4,6 @@ import ProfileCard from '../components/ProfileCard'
 
 
 import UserHelper from "../backendHelpers/UserHelper";
-import { ImagePath } from "../VARIABLES";
 import {useSelector} from "react-redux";
 
 
@@ -35,7 +34,7 @@ const favorites = () => {
                     title={nft.name}
                     like={nft.numLikes}
                     eth_price={5}
-                    image={`${ImagePath}${nft.nftFile}`}
+                    image={`${nft.nftFile}`}
                     desc={nft.description}
                     />
                 ))}

@@ -1,6 +1,5 @@
 import React from 'react'
 import { FaEthereum } from 'react-icons/fa'
-import {ImagePath} from "../VARIABLES";
 
 const SearchCollectionCard = (props) => {
   return (
@@ -12,7 +11,7 @@ const SearchCollectionCard = (props) => {
               <div className="flex justify-center">
                 <div className="-mt-16 flex justify-center">
                   <img
-                    src={`${ImagePath}${props.image}`}
+                    src={`${props.image}`}
                     className="mx-auto w-32 h-32 rounded-full shadow-lg shadow-black"
                     alt=""
                   />

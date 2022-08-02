@@ -6,7 +6,6 @@ import 'owl.carousel'
 import OwlCarousel from 'react-owl-carousel'
 import CategoriesCard from './CategoriesCard'
 
-import {ImagePath} from "../VARIABLES";
 
 const Slider = ({ props: { categories } }) => {
 
@@ -19,7 +18,7 @@ const Slider = ({ props: { categories } }) => {
             <OwlCarousel className="owl-carousel owl-theme" loop items={3} margin={6} lazyLoad autoplay autoplaySpeed={1000} autoplayTimeout={2000} autoplayHoverPause>
                 {
                     categories && JSON.parse(categories).map((category) => (
-                        <CategoriesCard key={category.name} category={category.name} image={`${ImagePath}${category.backgroundPicture}`}/>
+                        <CategoriesCard key={category.name} category={category.name} image={`${category.backgroundPicture}`}/>
                     ))
                 }
         </OwlCarousel>

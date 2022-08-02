@@ -5,7 +5,7 @@ import ProfileCard from '../components/ProfileCard'
 import SearchCollectionCard from '../components/SearchCollectionCard'
 import nftData from '../mock_data/item_data.json'
 import Router,{ useRouter } from 'next/router'
-import {APIPath, ImagePath} from '../VARIABLES'
+import {APIPath} from '../VARIABLES'
 
 const search = ({nfts,collections,text}) => {
     const router = useRouter()
@@ -18,7 +18,7 @@ const search = ({nfts,collections,text}) => {
     const [all_nfts, setAll_nfts] = useState(nfts)
     const [filteredCollections, setFilteredCollections] = useState(collections)
     const [all_collections, setAll_collections] = useState(collections)
-  
+
     useEffect(() => {
       let nftcontent = all_nfts.filter(
         (nft) => nft.name.toLowerCase().indexOf(filter.s.toLowerCase()) >= 0
@@ -55,9 +55,9 @@ const search = ({nfts,collections,text}) => {
                   />
                 )
               })}
-                
 
-                
+
+
             </div>
           </section>
         </div>
@@ -76,7 +76,7 @@ const search = ({nfts,collections,text}) => {
                   key={nft.id}
                   username={nft.owner}
                   title={nft.name}
-                  image={`${ImagePath}${nft.nftFile}`}
+                  image={`${nft.nftFile}`}
                   like={nft.numLikes}
                   eth_price={24}
                   desc={nft.description}

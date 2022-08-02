@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react'
 import NFTCollectionHelper from '../backendHelpers/NFTCollectionHelper'
-import { APIPath, ImagePath } from '../VARIABLES';
-import Link from 'next/link';
+import { APIPath } from '../VARIABLES';
 import TopCollectionCard from '../components/TopCollectionCard'
 
 const TopCollections = () => {

@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../components/Layout'
 import CollectionCard from "../components/CollectionCard";
-import {ImagePath} from "../VARIABLES";
 import Link from 'next/link';
 
 const myCollections = () => {

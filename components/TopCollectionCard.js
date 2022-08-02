@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { ImagePath } from '../VARIABLES'
 import Link from 'next/link'
 import NFTCollectionHelper from '../backendHelpers/NFTCollectionHelper';
 import UserHelper from '../backendHelpers/UserHelper';
@@ -35,7 +34,7 @@ function TopCollectionCard({collection, idx}) {
                   </div>
                   <img
                     className="h-10 w-10 rounded-full"
-                    src={`${ImagePath}${collection.collectionImage}`}
+                    src={`${collection.collectionImage}`}
                     alt=""
                   />
                   <div className="space-y-1 font-medium">
@@ -45,7 +44,7 @@ function TopCollectionCard({collection, idx}) {
               </a>
             </Link>
           </td>
-    
+
           <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-light text-white">
             <button onClick={handleWatchList}>
               <div className="container flex justify-between rounded-lg border px-2 text-center text-gray-400 hover:text-white focus:text-white">

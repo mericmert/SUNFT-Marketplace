@@ -6,7 +6,6 @@ import { MdFavorite } from 'react-icons/md'
 import { RiHistoryLine } from 'react-icons/ri'
 
 import NFTHelper from '../../../backendHelpers/NFTHelper'
-import { ImagePath } from '../../../VARIABLES'
 import NFT from '../../../objects/NFT'
 import Link from 'next/link'
 import Modal from '../../../components/Modal'
@@ -78,7 +77,7 @@ function Nft({ data }) {
             </div>
             <img
               className="h-96 w-[32rem] rounded-lg object-cover"
-              src={nftobj && `${ImagePath}${nftobj.nftFile}`}
+              src={nftobj && `${nftobj.nftFile}`}
             />
           </div>
           <div className="flex w-full flex-col">
@@ -116,7 +115,7 @@ function Nft({ data }) {
                <Modal></Modal>
               </div>
 
-              
+
 
               <div className="flex items-center gap-x-8">
                 <div className="flex items-center gap-x-2">
@@ -182,12 +181,12 @@ function Nft({ data }) {
                         <p className="mt-2 ml-1 text-base text-white"> 0.250 ETH</p>
                       </div>
               </td>
-              
+
               <td class="text-sm text-white font-light px-6 py-4 whitespace-nowrap">
                 @mdo
               </td>
             </tr>
-          
+
             <tr class="border-b transition duration-300 ease-in-out ">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
               2
@@ -198,7 +197,7 @@ function Nft({ data }) {
                         <p className="mt-2 ml-1 text-base text-white"> 0.345 ETH</p>
                       </div>
               </td>
-              
+
               <td class="text-sm text-white font-light px-6 py-4 whitespace-nowrap">
                 @mdo
               </td>

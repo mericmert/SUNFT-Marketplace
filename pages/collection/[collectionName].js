@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import ProfileCard from '../../components/ProfileCard'
 import NFTCollectionHelper from '../../backendHelpers/NFTCollectionHelper'
-import { ImagePath } from '../../VARIABLES'
 import Link from 'next/link'
 import UserHelper from "../../backendHelpers/UserHelper";
 import {useSelector} from "react-redux";
@@ -88,7 +87,7 @@ const collection = ({ collectionName }) => {
           <img
             className="h-64 w-full object-cover"
             src={
-              collection && `${ImagePath}${collection.collectionImage}`
+              collection && `${collection.collectionImage}`
             }
             alt="banner"
           ></img>
@@ -99,7 +98,7 @@ const collection = ({ collectionName }) => {
               className="mt-[-4rem] h-28 w-28 rounded-full border-2 border-[#202225] object-cover sm:h-36 sm:w-36"
               src={
                 products &&
-                `${ImagePath}${
+                `${
                   products[Math.floor(Math.random() * products.length)]?.nftFile
                 }`
               }
@@ -221,7 +220,7 @@ const collection = ({ collectionName }) => {
                   title={nft.name}
                   like={nft.numLikes}
                   eth_price={nft.price}
-                  image={`${ImagePath}${nft.nftFile}`}
+                  image={`${nft.nftFile}`}
                   desc={nft.description}
                 />
               ))}

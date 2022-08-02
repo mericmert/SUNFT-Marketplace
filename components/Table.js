@@ -1,7 +1,6 @@
 import React from 'react';
 import 'flowbite'
 import UserHelper from "../backendHelpers/UserHelper";
-import {ImagePath} from "../VARIABLES";
 import {useSelector} from "react-redux";
 
 
@@ -37,7 +36,7 @@ const Table = ({ watchLists, handleClick }) => {
                     <div className="flex items-center space-x-2">
                       <img
                           className="h-10 w-10 rounded-full"
-                          src={`${ImagePath}${watchList.collectionImage}`}
+                          src={`${watchList.collectionImage}`}
                           alt=""
                       />
                       <div className="space-y-1 font-medium">
