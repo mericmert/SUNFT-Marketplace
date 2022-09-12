@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react'
 import Layout from '../components/Layout'
 import useInput from "../hooks/useInputState";
 import {useRouter} from "next/router";
-import {createNewNFTContractAndMint} from "./blockchain/web3Functions";
+import {createNewNFTContractAndMint} from "../blockchain/web3Functions";
 import NFTCollectionHelper from "../backendHelpers/NFTCollectionHelper";
 import NFT from "../objects/NFT";
 import NFTHelper from "../backendHelpers/NFTHelper";

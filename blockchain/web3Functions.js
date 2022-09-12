@@ -3,7 +3,7 @@ import { ContractFactory,ethers } from "ethers";
 import erc20Abi from "./ABI/erc20abi.json";
 import marketAbi from "./ABI/marketabi.json";
 import nftAbi from "./ABI/erc721abi.json";
-import nftBytecode from "./bytecodes/nftBytecode";
+import nftBytecode from "./bytecodes/nftBytecode.json";
 
 
 
