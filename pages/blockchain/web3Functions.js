@@ -16,6 +16,7 @@ else{
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     var signer = provider.getSigner();
+
     const marketContract = new ethers.Contract(marketAddress,marketAbi,signer);
     const sucoinContract = new ethers.Contract(sucoinAddress,erc20Abi,signer);
 
