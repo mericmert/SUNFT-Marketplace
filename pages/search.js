@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import Layout from '../components/Layout'
 import ProfileCard from '../components/ProfileCard'
 import SearchCollectionCard from '../components/SearchCollectionCard'
-import nftData from '../mock_data/item_data.json'
 import Router,{ useRouter } from 'next/router'
 import {APIPath} from '../VARIABLES'
 
